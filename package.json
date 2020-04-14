@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.0.38",
-    "@smallwei/avue": "^2.4.0",
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
     "classlist-polyfill": "^1.2.0",

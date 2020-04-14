@@ -76,6 +76,7 @@ export default {
               this.$store.commit("COMMIT_TOKEN", res);
               this.$store.commit("SET_USER_INFO", res);
               this.$router.push({path: "/"});
+              loading.close();
             })
             .catch(err => {
               loading.close();

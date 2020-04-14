@@ -1,9 +1,6 @@
 import axios from "axios";
 import router from "../router/router";
 import {serialize} from '../util/util'
-import {
-    Loading
-} from "element-ui";
 import {Message} from 'element-ui'
 import store from '../store/store';
 import NProgress from 'nprogress' // progress bar

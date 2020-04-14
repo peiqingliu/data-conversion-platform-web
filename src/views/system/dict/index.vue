@@ -40,7 +40,6 @@
                     indexLabel:'序号',
                     selection: true,
                     border:true,
-                    title:'字典信息列表',
                     align:'center',
                     menuAlign:'center',
                     defaultSort:{
@@ -135,7 +134,6 @@
                     type: "warning"
                 })
                     .then(() => {
-                        debugger;
                         const params = {
                             id:row.id
                         };
@@ -187,7 +185,6 @@
                     ...Object.assign(this.query)
                 };
                 getByCondition(params).then(res => {
-                    debugger;
                     if (res.success === true){
                         const data = res.result;
                         this.page.total = data.totalElements;

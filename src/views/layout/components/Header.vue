@@ -23,8 +23,7 @@
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
-            <img
-              src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3266090804,66355162&fm=26&gp=0.jpg"
+            <img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3266090804,66355162&fm=26&gp=0.jpg"
               class="user-avatar"
             >
             {{username }}<i class="el-icon-caret-bottom"/>
@@ -53,9 +52,9 @@ export default {
   data() {
     return {
       fullscreen: false,
-      name: "linxin",
+      name: "系统管理员",
       message: 2,
-      username: "zyh"
+      username: "admin"
     };
   },
   computed: {
@@ -105,7 +104,7 @@ export default {
       this.fullscreen = !this.fullscreen;
     }
   }
-}; 
+};
 </script>
 <style lang="scss" scoped>
 .head-container {
