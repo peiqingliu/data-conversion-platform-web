@@ -67,6 +67,11 @@ export default {
               index: "dict",
               title: "字典管理"
             },
+            {
+              icon: 'el-icon-notebook-2',
+              index: "sync",
+              title: "数据管理"
+            },
             // {
             //   index: "trees",
             //   title: "树形控件",

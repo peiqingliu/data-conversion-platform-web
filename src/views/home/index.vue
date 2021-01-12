@@ -138,28 +138,7 @@ export default {
         startVal: 0,
         endVal: 10951
       },
-      todulist: [
-        {
-          checked: true,
-          todo: "学习"
-        },
-        {
-          checked: true,
-          todo: "吃饭"
-        },
-        {
-          checked: false,
-          todo: "睡觉"
-        },
-        {
-          checked: true,
-          todo: "看电视"
-        },
-        {
-          checked: true,
-          todo: "打篮球"
-        }
-      ]
+      todulist: []
     };
   },
   mounted() {

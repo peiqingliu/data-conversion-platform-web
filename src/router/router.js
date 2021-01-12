@@ -39,6 +39,12 @@ const myRouter=new Router({
             component: () => import(`@/views/system/dict/index.vue`),
             name:'dict',
             meta:{title:'字典管理'}
+          },
+          {
+            path:'/sync',
+            component: () => import(`@/views/system/synchronous/index.vue`),
+            name:'sync',
+            meta:{title:'数据管理'}
           }
       ]
     }

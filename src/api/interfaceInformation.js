@@ -10,3 +10,5 @@ export const add = (params) => post('/system/interfaceInformation/save',params);
 export const update = (params) => post('/system/interfaceInformation/update',params);
 //删除
 export const remove = (params) => get('/system/interfaceInformation/deleteById',params);
+
+export const startTask = (params) => post('/system/interfaceInformation/startTask',params);

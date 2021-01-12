@@ -5,87 +5,113 @@
                 :table-loading="loading"
                 :option="option"
                 v-model="form"
-                @row-del="rowDel"
-                @row-update="rowUpdate"
-                @row-save="rowSave"
                 :before-open="beforeOpen"
-                :page="page"
                 @search-change="searchChange"
                 @search-reset="searchReset"
                 @selection-change="selectionChange"
                 @current-change="currentChange"
                 @size-change="sizeChange"
                 @on-load="onLoad">
+            <template slot="menuLeft">
+                <el-button type="primary"
+                           icon="el-icon-switch-button"
+                           size="small"
+                           plain
+                           @click.stop="startSync">开启任务</el-button>
+            </template>
         </avue-crud>
     </basic-container>
 </template>
 
 <script>
-    import {getByCondition,add,update,remove} from "../../../api/dict"
+    import {findAllData, startSync} from "../../../api/sync";
+
     export default {
-        name:'index',
-        data(){
+        name: "index",
+        data() {
             return {
                 form:{},
                 selectionList: [],
                 loading: true,
-                query:{},
-                page: {
-                    pageSize: 10,
-                    currentPage: 1,
-                    total: 0
+                query:{
+                    dataType:"1"
                 },
                 option:{
+                    addBtn:false,
+                    delBtn:false,
+                    editBtn:false,
+                    viewBtn:false,
+                    menu:false,
                     index:true,
                     indexLabel:'序号',
                     selection: true,
                     border:true,
+                    dialogDrag:true,
+                    title:'',
+                    height:300,
                     align:'center',
                     menuAlign:'center',
-                    addBtn:false,
-                    defaultSort:{
-                        prop: 'sortOrder',
-                        order: 'ascending'
-                    },
+                    menuWidth:150,
+                    searchMenuSpan:4,
+                    dialogWidth:'70%',
                     column:[
                         {
-                            label:"字典KEY",
-                            prop:'dictKey',
+                            label:"类型",
+                            prop:"dataType",
+                            labelWidth:'125',
+                            type:'select',
+                            search:true,
+                            searchValue:'1',
+                            hide:true,
+                            dicData:[
+                                {
+                                    value: '1',
+                                    label: '门诊'
+                                }, {
+                                    value: '2',
+                                    label: '住院'
+                                }
+                            ],
+                        },
+                        {
+                            label:"结账ID",
+                            prop:'vak01',
                             width:80,
                             searchLabelWidth:100,
                             searchPlaceholder:'请输入字典KEY',
                         },
                         {
-                            label:'字典值',
-                            prop:'dictValue',
+                            label:'门诊号',
+                            prop:'vaa03',
                             width:150,
-                            searchRules: [{
-                                required: true,
-                                message: "请输入字典值",
-                                trigger: "blur"
-                            }],
+                            search:true,
                         },
                         {
-                            label:'排序',
-                            prop:'sortOrder',
-                            sortable:true,
+                            label:'姓名',
+                            prop:'vaa05',
+                            search:true,
                         },
                         {
-                            label:"类别",
-                            prop:'type',
+                            label:"病人ID",
+                            prop:'vaa01',
                         },
                         {
-                            label:'描述',
-                            prop:'description',
+                            label:'结账金额',
+                            prop:'vak08',
                         },
                         {
-                            label: "创建日期",
-                            prop: "createTime",
+                            label: "结账时间",
+                            prop: "vak13",
                             type: "datetime",
                             width:180,
                             format: "yyyy-MM-dd hh:mm:ss",
                             valueFormat: "yyyy-MM-dd hh:mm:ss",
-                        }
+                        },
+                        {
+                            label:'单据号',
+                            prop:'vai04',
+                            search:true,
+                        },
                     ]
                 },
                 data: []
@@ -101,52 +127,6 @@
             },
         },
         methods:{
-            rowSave(row, loading, done) {
-                add(row).then(() => {
-                    loading();
-                    this.onLoad(this.page);
-                    this.$message({
-                        type: "success",
-                        message: "操作成功!"
-                    });
-                }, error => {
-                    done();
-                    console.log(error);
-                });
-            },
-            rowUpdate(row, index, loading, done) {
-                update(row).then(() => {
-                    loading();
-                    this.onLoad(this.page);
-                    this.$message({
-                        type: "success",
-                        message: "操作成功!"
-                    });
-                }, error => {
-                    done();
-                    console.log(error);
-                });
-            },
-            rowDel(row) {
-                this.$confirm("确定将选择数据删除?", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                })
-                    .then(() => {
-                        const params = {
-                            id:row.id
-                        };
-                        return remove(params);
-                    })
-                    .then(() => {
-                        this.onLoad(this.page);
-                        this.$message({
-                            type: "success",
-                            message: "操作成功!"
-                        });
-                    });
-            },
             beforeOpen(done, type) {
                 done();
             },
@@ -155,6 +135,7 @@
                 this.onLoad(this.page);
             },
             searchChange(params,done) {
+                this.query = params;
                 params = {
                     ...this.page,
                     ...this.query
@@ -177,29 +158,36 @@
             handleSettingSQL(){
 
             },
+            startSync() {
+                if (this.selectionList.length === 0 ) {
+                    this.$message.warning("请选择数据");
+                    return;
+                }
+                startSync(this.selectionList).then(res => {
+                    if (res.success === true) {
+                        this.$message.info("开始同步")
+                    }
+                })
+            },
             onLoad(page,params ={}) {
                 this.loading = true;
                 params = {
-                    currentPage:page.currentPage,
-                    pageSize:page.pageSize,
                     ...Object.assign(this.query)
                 };
-                debugger
-                getByCondition(params).then(res => {
+                findAllData(params).then(res => {
                     if (res.success === true){
                         const data = res.result;
-                        this.page.total = data.totalElements;
-                        this.data = data.content;
+                        this.data = data;
                         this.loading = false;
                         this.selectionClear();
                     }
                 });
                 this.loading = false;
             }
-        }
+        },
     }
 </script>
 
+<style scoped>
 
-<style>
 </style>
